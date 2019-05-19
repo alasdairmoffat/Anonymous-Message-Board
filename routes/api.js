@@ -9,6 +9,7 @@
 
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 dotenv.config();
 
@@ -51,7 +52,8 @@ module.exports = (app) => {
         res.send('missing parameters');
       } else {
         const Thread = modelThread(board);
-        const newThread = new Thread({ text, delete_password });
+        const hash = await bcrypt.hash(delete_password, 12);
+        const newThread = new Thread({ text, delete_password: hash });
         const data = await newThread.save();
         res.redirect(`/b/${board}`);
       }
@@ -65,9 +67,16 @@ module.exports = (app) => {
         res.send('missing parameters');
       } else {
         const Thread = modelThread(board);
-        const response = await Thread.findOneAndDelete({ _id: thread_id, delete_password });
+        const thread = await Thread.findById(thread_id);
+        const hash = thread.delete_password;
+        const isMatch = await bcrypt.compare(delete_password, hash);
 
-        res.send(response ? 'success' : 'incorrect password');
+        if (isMatch) {
+          const success = await Thread.findByIdAndDelete(thread_id);
+          res.send('success');
+        } else {
+          res.send('incorrect password');
+        }
       }
 
       const Thread = modelThread(board);
@@ -109,8 +118,9 @@ module.exports = (app) => {
       } else {
         const Reply = modelReply(board);
         const Thread = modelThread(board);
+        const hash = await bcrypt.hash(delete_password, 12);
 
-        const newReply = new Reply({ text, delete_password });
+        const newReply = new Reply({ text, delete_password: hash });
         const thread = await Thread.findByIdAndUpdate(thread_id, {
           $push: { replies: newReply },
           bumped_on: Date.now(),
@@ -133,9 +143,10 @@ module.exports = (app) => {
           { _id: thread_id, 'replies._id': reply_id },
           { 'replies.$.delete_password': 1 },
         );
-        const password = thread.replies[0].delete_password;
+        const hash = thread.replies[0].delete_password;
+        const isMatch = await bcrypt.compare(delete_password, hash);
 
-        if (password === delete_password) {
+        if (isMatch) {
           const updatedThread = await Thread.findOneAndUpdate(
             { _id: thread_id, 'replies._id': reply_id },
             { 'replies.$.text': '[deleted]' },
