@@ -35,6 +35,7 @@ module.exports = (app) => {
           delete_password: 0,
           'replies.reported': 0,
           'replies.delete_password': 0,
+          __v: 0,
           replies: { $slice: -3 },
         },
       )
@@ -104,6 +105,7 @@ module.exports = (app) => {
         delete_password: 0,
         'replies.reported': 0,
         'replies.delete_password': 0,
+        __v: 0,
       });
 
       res.json(thread);

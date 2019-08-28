@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
@@ -62,7 +63,7 @@ app.use((req, res, next) => {
 
 // Start our server and tests!
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
   if (process.env.NODE_ENV === 'test') {
     console.log('Running Tests...');
@@ -78,4 +79,10 @@ app.listen(port, () => {
   }
 });
 
+function stop() {
+  mongoose.connection.close();
+  server.close();
+}
+
 module.exports = app; // for testing
+module.exports.stop = stop;

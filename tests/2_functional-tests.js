@@ -5,7 +5,7 @@
  *       -----[Keep the tests in the same order!]-----
  *       (if additional are added, keep them at the very end!)
  */
-/* global suite test */
+/* global suite test suiteTeardown */
 
 const chaiHttp = require('chai-http');
 const chai = require('chai');
@@ -16,6 +16,10 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', () => {
+  suiteTeardown(async () => {
+    server.stop();
+  });
+
   const delete_password = 'isadtyrc2n%gbk';
   let threadId1;
   let threadId2;
