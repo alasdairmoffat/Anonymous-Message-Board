@@ -272,7 +272,7 @@ suite('Functional Tests', () => {
   });
 
   suite('Final cleanup', () => {
-    test('delete remianing thread', (done) => {
+    test('delete remaining thread', (done) => {
       chai
         .request(server)
         .delete('/api/threads/tests')

@@ -23,7 +23,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 module.exports = (app) => {
   app
@@ -40,11 +40,12 @@ module.exports = (app) => {
           'replies.reported': 0,
           'replies.delete_password': 0,
           __v: 0,
-          replies: { $slice: -3 },
         },
       )
         .sort('-bumped_on')
         .limit(10);
+
+      threads.forEach((thread) => (thread.replies = thread.replies.slice(-3)));
 
       res.json(threads);
     })
@@ -147,7 +148,7 @@ module.exports = (app) => {
 
         const thread = await Thread.findOne(
           { _id: thread_id, 'replies._id': reply_id },
-          { 'replies.$.delete_password': 1 },
+          { 'replies.delete_password': 1 },
         );
         const hash = thread.replies[0].delete_password;
         const isMatch = await bcrypt.compare(delete_password, hash);
