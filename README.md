@@ -6,6 +6,8 @@
 [![Build Status](https://travis-ci.com/alasdairmoffat/Anonymous-Message-Board.svg?branch=master)](https://travis-ci.com/alasdairmoffat/Anonymous-Message-Board)
 [![codecov](https://codecov.io/gh/alasdairmoffat/Anonymous-Message-Board/branch/master/graph/badge.svg)](https://codecov.io/gh/alasdairmoffat/Anonymous-Message-Board)
 
+![Demo Image](../assets/demo-image.png?raw=true)
+
 ## Table of Contents
 
 - [Preview](#preview)
