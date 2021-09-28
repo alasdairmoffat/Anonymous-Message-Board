@@ -18,7 +18,7 @@
 
 ## Preview
 
-[Glitch](https://alasdairmoffat-anonymous-message-board.glitch.me)
+[alasdairmoffat-anonymous-message-board.glitch.me](https://alasdairmoffat-anonymous-message-board.glitch.me)
 
 ## General Info
 
